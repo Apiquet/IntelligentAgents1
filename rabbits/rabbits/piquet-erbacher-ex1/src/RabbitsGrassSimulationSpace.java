@@ -74,4 +74,8 @@ public class RabbitsGrassSimulationSpace {
 
 		  return retVal;
 	  }
+
+	  public void removeAgentAt(int x, int y){
+		  agentSpace.putObjectAt(x, y, null);
+	  }
 }

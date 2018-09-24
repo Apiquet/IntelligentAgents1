@@ -117,6 +117,11 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 					RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
 					cda.step();
 				}
+				int deadAgents = reapDeadAgents();
+		        for(int i =0; i < deadAgents; i++){
+		          addNewAgent();
+		        }
+		        displaySurf.updateDisplay();
 			}
 		}
 		schedule.scheduleActionBeginning(0, new CarryDropStep());
@@ -153,6 +158,20 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    cdSpace.addAgent(a);
 
 	}
+	private int reapDeadAgents(){
+		int count = 0;
+		for(int i = (agentList.size() - 1); i >= 0 ; i--){
+			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
+			if(cda.getStepsToLive() < 1){
+				cdSpace.removeAgentAt(cda.getX(), cda.getY());
+				cdSpace.spreadMoney(cda.getMoney());
+				agentList.remove(i);
+				count++;
+			}
+		}
+		return count;
+	}
+
 	private int countLivingAgents(){
 		int livingAgents = 0;
 		for(int i = 0; i < agentList.size(); i++){

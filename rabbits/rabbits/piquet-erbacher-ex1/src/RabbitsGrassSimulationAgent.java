@@ -35,7 +35,10 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	}
 
 	public void draw(SimGraphics G){
-		G.drawFastRoundRect(Color.blue);
+		if(stepsToLive > 10)
+			G.drawFastRoundRect(Color.green);
+		else
+			G.drawFastRoundRect(Color.blue);
 	}
 	public void setXY(int newX, int newY){
 		x = newX;
