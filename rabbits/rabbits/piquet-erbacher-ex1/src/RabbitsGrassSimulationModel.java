@@ -1,6 +1,11 @@
+import java.awt.Color;
+
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimModelImpl;
 import uchicago.src.sim.engine.SimInit;
+import uchicago.src.sim.gui.DisplaySurface;
+import uchicago.src.sim.gui.ColorMap;
+import uchicago.src.sim.gui.Value2DDisplay;
 
 
 /**
@@ -17,6 +22,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	private Schedule schedule;
 	private RabbitsGrassSimulationSpace cdSpace;
+	private DisplaySurface displaySurf;
 
 	// Default Values
 	private static final int NUMAGENTS = 100;
@@ -37,6 +43,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		buildModel();
 		buildSchedule();
 		buildDisplay();
+	    displaySurf.display();
 	}
 
 	public String[] getInitParam() {
@@ -65,6 +72,15 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		// TODO Auto-generated method stub
 		System.out.println("Running setup");
 		cdSpace = null;
+		
+		if (displaySurf != null){
+			displaySurf.dispose();
+		}
+		displaySurf = null;
+
+		displaySurf = new DisplaySurface(this, "Carry Drop Model Window 1");
+
+		registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
 	}
 	public void buildModel(){
 		System.out.println("Running BuildModel");
@@ -78,6 +94,17 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public void buildDisplay(){
 		System.out.println("Running BuildDisplay");
+		ColorMap map = new ColorMap();
+
+	    for(int i = 1; i<16; i++){
+	      map.mapColor(i, new Color((int)(i * 8 + 127), 0, 0));
+	    }
+	    map.mapColor(0, Color.white);
+
+	    Value2DDisplay displayMoney = 
+	        new Value2DDisplay(cdSpace.getCurrentMoneySpace(), map);
+
+	    displaySurf.addDisplayable(displayMoney, "Money");
 	}
 	
 	public int getWorldXSize(){

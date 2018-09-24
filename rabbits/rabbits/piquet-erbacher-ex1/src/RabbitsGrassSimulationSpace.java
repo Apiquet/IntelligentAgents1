@@ -41,4 +41,7 @@ public class RabbitsGrassSimulationSpace {
 	    }
 	    return i;
 	  }
+	  public Object2DGrid getCurrentMoneySpace(){
+		  return moneySpace;
+	  }
 }
