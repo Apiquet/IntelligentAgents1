@@ -69,6 +69,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	public void buildModel(){
 		System.out.println("Running BuildModel");
 	    cdSpace = new RabbitsGrassSimulationSpace(worldXSize, worldYSize);
+	    cdSpace.spreadMoney(money);
 	}
 
 	public void buildSchedule(){
