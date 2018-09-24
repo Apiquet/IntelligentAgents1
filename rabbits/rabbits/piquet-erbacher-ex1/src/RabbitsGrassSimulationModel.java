@@ -64,9 +64,11 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	public void setup() {
 		// TODO Auto-generated method stub
 		System.out.println("Running setup");
+		cdSpace = null;
 	}
 	public void buildModel(){
 		System.out.println("Running BuildModel");
+	    cdSpace = new RabbitsGrassSimulationSpace(worldXSize, worldYSize);
 	}
 
 	public void buildSchedule(){
