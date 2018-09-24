@@ -21,10 +21,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private static final int NUMAGENTS = 100;
 	private static final int WORLDXSIZE = 40;
 	private static final int WORLDYSIZE = 40;
-	  
+	private static final int TOTALMONEY = 1000;
+
 	//Number of agent
 	private int numAgents = NUMAGENTS;
-	
+	private int money = TOTALMONEY;
+
 	//World size	
 	private int worldXSize = WORLDXSIZE;
 	private int worldYSize = WORLDYSIZE;
@@ -38,7 +40,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public String[] getInitParam() {
 		// TODO Auto-generated method stub
-		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize" };
+		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Money" };
 		return initParams;
 	}
 	public int getNumAgents(){
@@ -90,6 +92,14 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		worldYSize = wys;
 	}
 
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int i) {
+		money = i;
+	}
+	
 	public static void main(String[] args) {			
 		SimInit init = new SimInit();
 		//Instantiates the model
