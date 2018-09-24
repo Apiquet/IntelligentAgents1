@@ -6,46 +6,46 @@ import uchicago.src.sim.space.Object2DGrid;
  */
 
 public class RabbitsGrassSimulationSpace {
-	private Object2DGrid moneySpace;
+	private Object2DGrid grassSpace;
 	private Object2DGrid agentSpace;
 
 	public RabbitsGrassSimulationSpace(int xSize, int ySize){
-		moneySpace = new Object2DGrid(xSize, ySize);
+		grassSpace = new Object2DGrid(xSize, ySize);
 	    agentSpace = new Object2DGrid(xSize, ySize);
 
 	    for(int i = 0; i < xSize; i++){
 			for(int j = 0; j < ySize; j++){
-				moneySpace.putObjectAt(i,j,new Integer(0));
+				grassSpace.putObjectAt(i,j,new Integer(0));
 			}
 		}
 	}
-	public void spreadMoney(int money){
-	    // Randomly place money in moneySpace
-	    for(int i = 0; i < money; i++){
+	public void spreadGrass(int grass){
+	    // Randomly place grass in grassSpace
+	    for(int i = 0; i < grass; i++){
 
 	      // Choose coordinates
-	      int x = (int)(Math.random()*(moneySpace.getSizeX()));
-	      int y = (int)(Math.random()*(moneySpace.getSizeY()));
+	      int x = (int)(Math.random()*(grassSpace.getSizeX()));
+	      int y = (int)(Math.random()*(grassSpace.getSizeY()));
 
 	      // Get the value of the object at those coordinates
-	      int currentValue = getMoneyAt(x, y);
+	      int currentValue = getGrassAt(x, y);
 	      // Replace the Integer object with another one with the new value
-	      moneySpace.putObjectAt(x,y,new Integer(currentValue + 1));
+	      grassSpace.putObjectAt(x,y,new Integer(currentValue + 1));
 	    }
 	  }
 
-	  public int getMoneyAt(int x, int y){
+	  public int getGrassAt(int x, int y){
 	    int i;
-	    if(moneySpace.getObjectAt(x,y)!= null){
-	      i = ((Integer)moneySpace.getObjectAt(x,y)).intValue();
+	    if(grassSpace.getObjectAt(x,y)!= null){
+	      i = ((Integer)grassSpace.getObjectAt(x,y)).intValue();
 	    }
 	    else{
 	      i = 0;
 	    }
 	    return i;
 	  }
-	  public Object2DGrid getCurrentMoneySpace(){
-		  return moneySpace;
+	  public Object2DGrid getCurrentGrassSpace(){
+		  return grassSpace;
 	  }
 	  public Object2DGrid getCurrentAgentSpace(){
 		  return agentSpace;
@@ -79,10 +79,10 @@ public class RabbitsGrassSimulationSpace {
 	  public void removeAgentAt(int x, int y){
 		  agentSpace.putObjectAt(x, y, null);
 	  }
-	  public int takeMoneyAt(int x, int y){
-		  int money = getMoneyAt(x, y);
-		  moneySpace.putObjectAt(x, y, new Integer(0));
-		  return money;
+	  public int takeGrassAt(int x, int y){
+		  int grass = getGrassAt(x, y);
+		  grassSpace.putObjectAt(x, y, new Integer(0));
+		  return grass;
 	  }
 	  public boolean moveAgentAt(int x, int y, int newX, int newY){
 		  boolean retVal = false;

@@ -15,7 +15,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	private int y;
 	private int vX;
 	private int vY;
-	private int money;
+	private int grass;
 	private int stepsToLive;
 	private static int IDNumber = 0;
 	private int ID;
@@ -25,7 +25,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	public RabbitsGrassSimulationAgent(int minLifespan, int maxLifespan){
 		x = -1;
 		y = -1;
-		money = 0;
+		grass = 0;
 	    setVxVy();
 
 		stepsToLive = 
@@ -50,10 +50,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	}
 
 	public void draw(SimGraphics G){
-		if(stepsToLive > 10)
-			G.drawFastRoundRect(Color.green);
-		else
-			G.drawFastRoundRect(Color.blue);
+		G.drawFastRoundRect(Color.white);
 	}
 	public void setXY(int newX, int newY){
 		x = newX;
@@ -66,8 +63,8 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	    return "A-" + ID;
 	}
 
-	public int getMoney(){
-		return money;
+	public int getGrass(){
+		return grass;
 	}
 
 	public int getStepsToLive(){
@@ -79,28 +76,31 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				" at " + 
 				x + ", " + y + 
 				" has " + 
-				getMoney() + " dollars" + 
+				getGrass() + " dollars" + 
 				" and " + 
 				getStepsToLive() + " steps to live.");
 	}
 	public void step(){
-	    int newX = x + vX;
-	    int newY = y + vY;
+		int newX = x + vX;
+		int newY = y + vY;
 
-	    Object2DGrid grid = cdSpace.getCurrentAgentSpace();
-	    newX = (newX + grid.getSizeX()) % grid.getSizeX();
-	    newY = (newY + grid.getSizeY()) % grid.getSizeY();
+		Object2DGrid grid = cdSpace.getCurrentAgentSpace();
+		newX = (newX + grid.getSizeX()) % grid.getSizeX();
+		newY = (newY + grid.getSizeY()) % grid.getSizeY();
 
-	    if(tryMove(newX, newY)){
-	      money += cdSpace.takeMoneyAt(x, y);
-	    }
-	    else{
-	      setVxVy();
-	    }
-	    stepsToLive--;
-	  }
-
-	  private boolean tryMove(int newX, int newY){
-	    return cdSpace.moveAgentAt(x, y, newX, newY);
-	  }
+		if(tryMove(newX, newY)){
+			grass += cdSpace.takeGrassAt(x, y);
+		}
+		else{
+			setVxVy();
+			stepsToLive++;
+		}
+		stepsToLive--;
+	}
+	public void DecreaseStepsToLiveFromReproduction(){
+		stepsToLive-=20;
+	}
+	private boolean tryMove(int newX, int newY){
+		return cdSpace.moveAgentAt(x, y, newX, newY);
+	}
 }

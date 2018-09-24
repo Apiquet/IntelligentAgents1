@@ -31,16 +31,16 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private ArrayList agentList;
 
 	// Default Values
-	private static final int NUMAGENTS = 100;
+	private static final int NUMAGENTS = 10;
 	private static final int WORLDXSIZE = 40;
 	private static final int WORLDYSIZE = 40;
-	private static final int TOTALMONEY = 1000;
-	private static final int AGENT_MIN_LIFESPAN = 30;
-	private static final int AGENT_MAX_LIFESPAN = 50;
+	private static final int TOTALGRASS = 400;
+	private static final int AGENT_MIN_LIFESPAN = 40;
+	private static final int AGENT_MAX_LIFESPAN = 60;
 
 	//Number of agent
 	private int numAgents = NUMAGENTS;
-	private int money = TOTALMONEY;
+	private int grass = TOTALGRASS;
 
 	private int agentMinLifespan = AGENT_MIN_LIFESPAN;
 	private int agentMaxLifespan = AGENT_MAX_LIFESPAN;
@@ -58,7 +58,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public String[] getInitParam() {
 		// TODO Auto-generated method stub
-		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Money", "AgentMinLifespan", "AgentMaxLifespan" };
+		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentMinLifespan", "AgentMaxLifespan" };
 		return initParams;
 	}
 	public int getNumAgents(){
@@ -97,7 +97,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	public void buildModel(){
 		System.out.println("Running BuildModel");
 	    cdSpace = new RabbitsGrassSimulationSpace(worldXSize, worldYSize);
-	    cdSpace.spreadMoney(money);
+	    cdSpace.spreadGrass(grass);
 	    
 	    for(int i = 0; i < numAgents; i++){
 	    	addNewAgent();
@@ -117,8 +117,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 					RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
 					cda.step();
 				}
-				int deadAgents = reapDeadAgents();
-		        for(int i =0; i < deadAgents; i++){
+				int reproducibleAgentsCount = ReproducibleAgentsCount();
+				reapDeadAgents();
+		        for(int i =0; i < reproducibleAgentsCount; i++){
 		          addNewAgent();
 		        }
 		        displaySurf.updateDisplay();
@@ -139,17 +140,17 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		ColorMap map = new ColorMap();
 
 	    for(int i = 1; i<16; i++){
-	      map.mapColor(i, new Color((int)(i * 8 + 127), 0, 0));
+	      map.mapColor(i, new Color(34,139,34));
 	    }
-	    map.mapColor(0, Color.white);
+	    map.mapColor(0, Color.orange);
 
-	    Value2DDisplay displayMoney = 
-	        new Value2DDisplay(cdSpace.getCurrentMoneySpace(), map);
+	    Value2DDisplay displayGrass = 
+	        new Value2DDisplay(cdSpace.getCurrentGrassSpace(), map);
 
 	    Object2DDisplay displayAgents = new Object2DDisplay(cdSpace.getCurrentAgentSpace());
 	    displayAgents.setObjectList(agentList);
 
-	    displaySurf.addDisplayable(displayMoney, "Money");
+	    displaySurf.addDisplayable(displayGrass, "Grass");
 	    displaySurf.addDisplayable(displayAgents, "Agents");
 	}
 	private void addNewAgent(){
@@ -158,13 +159,24 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    cdSpace.addAgent(a);
 
 	}
+	private int ReproducibleAgentsCount(){
+		int count = 0;
+		for(int i = (agentList.size() - 1); i >= 0 ; i--){
+			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
+			if(cda.getStepsToLive() > 50){
+				count++;
+				cda.DecreaseStepsToLiveFromReproduction();
+			}
+		}
+		return count;
+	}
 	private int reapDeadAgents(){
 		int count = 0;
 		for(int i = (agentList.size() - 1); i >= 0 ; i--){
 			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
 			if(cda.getStepsToLive() < 1){
 				cdSpace.removeAgentAt(cda.getX(), cda.getY());
-				cdSpace.spreadMoney(cda.getMoney());
+				cdSpace.spreadGrass(cda.getGrass());
 				agentList.remove(i);
 				count++;
 			}
@@ -198,12 +210,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		worldYSize = wys;
 	}
 
-	public int getMoney() {
-		return money;
+	public int getGrass() {
+		return grass;
 	}
 
-	public void setMoney(int i) {
-		money = i;
+	public void setGrass(int i) {
+		grass = i;
 	}
 	public int getAgentMaxLifespan() {
 		return agentMaxLifespan;
