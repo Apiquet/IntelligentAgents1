@@ -1,5 +1,7 @@
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimModelImpl;
+import uchicago.src.sim.engine.SimInit;
+
 
 /**
  * Class that implements the simulation model for the rabbits grass
@@ -22,10 +24,6 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private int worldXSize;
 	private int worldYSize;
 	
-	public static void main(String[] args) {			
-			System.out.println("Rabbit skeleton");			
-	}
-
 	public void begin() {
 		// TODO Auto-generated method stub
 		buildModel();
@@ -84,5 +82,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public void buildDisplay(){
 
+	}
+	public static void main(String[] args) {			
+		SimInit init = new SimInit();
+		//Instantiates the model
+		RabbitsGrassSimulationModel model = new RabbitsGrassSimulationModel();
+		//Loading the model
+	    init.loadModel(model, "", false);	
 	}
 }
