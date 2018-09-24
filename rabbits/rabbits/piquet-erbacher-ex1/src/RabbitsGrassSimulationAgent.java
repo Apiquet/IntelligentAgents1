@@ -10,11 +10,30 @@ import uchicago.src.sim.gui.SimGraphics;
 
 public class RabbitsGrassSimulationAgent implements Drawable {
 
+	private int x;
+	private int y;
+	private int money;
+	private int stepsToLive;
+	private static int IDNumber = 0;
+	private int ID;
+
+	public RabbitsGrassSimulationAgent(int minLifespan, int maxLifespan){
+		x = -1;
+		y = -1;
+		money = 0;
+		stepsToLive = 
+		(int)((Math.random() * (maxLifespan - minLifespan)) + minLifespan);
+		IDNumber++;
+	    ID = IDNumber;
+	}
 	public void draw(SimGraphics arg0) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	public void setXY(int newX, int newY){
+		x = newX;
+		y = newY;
+	}
 	public int getX() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -23,6 +42,27 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	public int getY() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	public String getID(){
+	    return "A-" + ID;
+	}
+
+	public int getMoney(){
+		return money;
+	}
+
+	public int getStepsToLive(){
+		return stepsToLive;
+	}
+
+	public void report(){
+		System.out.println(getID() + 
+				" at " + 
+				x + ", " + y + 
+				" has " + 
+				getMoney() + " dollars" + 
+				" and " + 
+				getStepsToLive() + " steps to live.");
 	}
 
 }

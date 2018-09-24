@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.util.ArrayList;
 
 import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimModelImpl;
@@ -23,17 +24,22 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private Schedule schedule;
 	private RabbitsGrassSimulationSpace cdSpace;
 	private DisplaySurface displaySurf;
+	private ArrayList agentList;
 
 	// Default Values
 	private static final int NUMAGENTS = 100;
 	private static final int WORLDXSIZE = 40;
 	private static final int WORLDYSIZE = 40;
 	private static final int TOTALMONEY = 1000;
+	private static final int AGENT_MIN_LIFESPAN = 30;
+	private static final int AGENT_MAX_LIFESPAN = 50;
 
 	//Number of agent
 	private int numAgents = NUMAGENTS;
 	private int money = TOTALMONEY;
 
+	private int agentMinLifespan = AGENT_MIN_LIFESPAN;
+	private int agentMaxLifespan = AGENT_MAX_LIFESPAN;
 	//World size	
 	private int worldXSize = WORLDXSIZE;
 	private int worldYSize = WORLDYSIZE;
@@ -48,7 +54,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public String[] getInitParam() {
 		// TODO Auto-generated method stub
-		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Money" };
+		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Money", "AgentMinLifespan", "AgentMaxLifespan" };
 		return initParams;
 	}
 	public int getNumAgents(){
@@ -72,7 +78,8 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		// TODO Auto-generated method stub
 		System.out.println("Running setup");
 		cdSpace = null;
-		
+	    agentList = new ArrayList();
+
 		if (displaySurf != null){
 			displaySurf.dispose();
 		}
@@ -86,6 +93,10 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		System.out.println("Running BuildModel");
 	    cdSpace = new RabbitsGrassSimulationSpace(worldXSize, worldYSize);
 	    cdSpace.spreadMoney(money);
+	    
+	    for(int i = 0; i < numAgents; i++){
+	        addNewAgent();
+	      }
 	}
 
 	public void buildSchedule(){
@@ -106,7 +117,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	    displaySurf.addDisplayable(displayMoney, "Money");
 	}
-	
+	private void addNewAgent(){
+		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentMinLifespan, agentMaxLifespan);
+		agentList.add(a);
+	    cdSpace.addAgent(a);
+
+	}
 	public int getWorldXSize(){
 		return worldXSize;
 	}
@@ -130,7 +146,21 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	public void setMoney(int i) {
 		money = i;
 	}
-	
+	public int getAgentMaxLifespan() {
+		return agentMaxLifespan;
+	}
+
+	public int getAgentMinLifespan() {
+		return agentMinLifespan;
+	}
+
+	public void setAgentMaxLifespan(int i) {
+		agentMaxLifespan = i;
+	}
+
+	public void setAgentMinLifespan(int i) {
+		agentMinLifespan = i;
+	}
 	public static void main(String[] args) {			
 		SimInit init = new SimInit();
 		//Instantiates the model
