@@ -7,6 +7,8 @@ import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Value2DDisplay;
+import uchicago.src.sim.gui.Object2DDisplay;
+
 
 
 /**
@@ -95,8 +97,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    cdSpace.spreadMoney(money);
 	    
 	    for(int i = 0; i < numAgents; i++){
-	        addNewAgent();
-	      }
+	    	addNewAgent();
+	    }
+	    for(int i = 0; i < agentList.size(); i++){
+	    	RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
+	    	cda.report();
+	    }
 	}
 
 	public void buildSchedule(){
@@ -115,7 +121,11 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    Value2DDisplay displayMoney = 
 	        new Value2DDisplay(cdSpace.getCurrentMoneySpace(), map);
 
+	    Object2DDisplay displayAgents = new Object2DDisplay(cdSpace.getCurrentAgentSpace());
+	    displayAgents.setObjectList(agentList);
+
 	    displaySurf.addDisplayable(displayMoney, "Money");
+	    displaySurf.addDisplayable(displayAgents, "Agents");
 	}
 	private void addNewAgent(){
 		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentMinLifespan, agentMaxLifespan);
