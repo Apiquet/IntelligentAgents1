@@ -84,4 +84,15 @@ public class RabbitsGrassSimulationSpace {
 		  moneySpace.putObjectAt(x, y, new Integer(0));
 		  return money;
 	  }
+	  public boolean moveAgentAt(int x, int y, int newX, int newY){
+		  boolean retVal = false;
+		  if(!isCellOccupied(newX, newY)){
+			  RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentSpace.getObjectAt(x, y);
+			  removeAgentAt(x,y);
+			  cda.setXY(newX, newY);
+			  agentSpace.putObjectAt(newX, newY, cda);
+			  retVal = true;
+		  }
+		  return retVal;
+	  }
 }
