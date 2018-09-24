@@ -63,5 +63,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				" and " + 
 				getStepsToLive() + " steps to live.");
 	}
-
+	public void step(){
+		stepsToLive--;
+	}
 }
