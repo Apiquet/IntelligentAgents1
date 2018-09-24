@@ -31,10 +31,10 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private ArrayList agentList;
 
 	// Default Values
-	private static final int NUMAGENTS = 10;
+	private static final int NUMAGENTS = 40;
 	private static final int WORLDXSIZE = 40;
 	private static final int WORLDYSIZE = 40;
-	private static final int TOTALGRASS = 400;
+	private static final int TOTALGRASS = 500;
 	private static final int AGENT_MIN_LIFESPAN = 40;
 	private static final int AGENT_MAX_LIFESPAN = 60;
 
