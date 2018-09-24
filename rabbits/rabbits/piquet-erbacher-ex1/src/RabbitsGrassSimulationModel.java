@@ -16,7 +16,8 @@ import uchicago.src.sim.engine.SimInit;
 public class RabbitsGrassSimulationModel extends SimModelImpl {		
 
 	private Schedule schedule;
-	
+	private RabbitsGrassSimulationSpace cdSpace;
+
 	// Default Values
 	private static final int NUMAGENTS = 100;
 	private static final int WORLDXSIZE = 40;

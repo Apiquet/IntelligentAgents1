@@ -8,7 +8,7 @@ import uchicago.src.sim.space.Object2DGrid;
 public class RabbitsGrassSimulationSpace {
 	private Object2DGrid moneySpace;
 	
-	public void CarryDropSpace(int xSize, int ySize){
+	public RabbitsGrassSimulationSpace(int xSize, int ySize){
 	    moneySpace = new Object2DGrid(xSize, ySize);
 	    for(int i = 0; i < xSize; i++){
 	      for(int j = 0; j < ySize; j++){
