@@ -13,7 +13,9 @@ import uchicago.src.sim.engine.SimModelImpl;
 
 public class RabbitsGrassSimulationModel extends SimModelImpl {		
 
-		public static void main(String[] args) {
+	private Schedule schedule;
+	private int numAgents;
+	public static void main(String[] args) {
 			
 			System.out.println("Rabbit skeleton");
 			
@@ -21,26 +23,46 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 		public void begin() {
 			// TODO Auto-generated method stub
-			
+			buildModel();
+		    buildSchedule();
+		    buildDisplay();
 		}
 
 		public String[] getInitParam() {
 			// TODO Auto-generated method stub
-			return null;
+			String[] initParams = { "NumAgents", "AgentStrength" };
+		    return initParams;
+		}
+		public int getNumAgents(){
+		    return numAgents;
 		}
 
+		public void setNumAgents(int na){
+		    numAgents = na;
+		}
 		public String getName() {
 			// TODO Auto-generated method stub
-			return null;
+			return "Rabbit Grass Simulation";
 		}
 
 		public Schedule getSchedule() {
 			// TODO Auto-generated method stub
-			return null;
+			return schedule;
 		}
 
 		public void setup() {
 			// TODO Auto-generated method stub
 			
+		}
+		public void buildModel(){
+		
+		}
+
+		public void buildSchedule(){
+		  
+		}
+
+		public void buildDisplay(){
+		  
 		}
 }
