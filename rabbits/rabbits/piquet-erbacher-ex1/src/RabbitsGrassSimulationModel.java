@@ -120,6 +120,13 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 			}
 		}
 		schedule.scheduleActionBeginning(0, new CarryDropStep());
+		class CarryDropCountLiving extends BasicAction {
+		      public void execute(){
+		        countLivingAgents();
+		      }
+		    }
+
+		    schedule.scheduleActionAtInterval(10, new CarryDropCountLiving());
 	}
 
 	public void buildDisplay(){
@@ -145,6 +152,16 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		agentList.add(a);
 	    cdSpace.addAgent(a);
 
+	}
+	private int countLivingAgents(){
+		int livingAgents = 0;
+		for(int i = 0; i < agentList.size(); i++){
+			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
+			if(cda.getStepsToLive() > 0) livingAgents++;
+		}
+		System.out.println("Number of living agents is: " + livingAgents);
+
+		return livingAgents;
 	}
 	public int getWorldXSize(){
 		return worldXSize;
