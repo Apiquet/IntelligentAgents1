@@ -67,6 +67,7 @@ public class RabbitsGrassSimulationSpace {
 			  if(isCellOccupied(x,y) == false){
 				  agentSpace.putObjectAt(x,y,agent);
 				  agent.setXY(x,y);
+				  agent.setCarryDropSpace(this);
 				  retVal = true;
 			  }
 			  count++;
@@ -77,5 +78,10 @@ public class RabbitsGrassSimulationSpace {
 
 	  public void removeAgentAt(int x, int y){
 		  agentSpace.putObjectAt(x, y, null);
+	  }
+	  public int takeMoneyAt(int x, int y){
+		  int money = getMoneyAt(x, y);
+		  moneySpace.putObjectAt(x, y, new Integer(0));
+		  return money;
 	  }
 }

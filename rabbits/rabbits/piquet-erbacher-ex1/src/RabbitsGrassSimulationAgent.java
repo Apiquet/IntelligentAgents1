@@ -16,6 +16,8 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	private int stepsToLive;
 	private static int IDNumber = 0;
 	private int ID;
+	private RabbitsGrassSimulationSpace cdSpace;
+
 
 	public RabbitsGrassSimulationAgent(int minLifespan, int maxLifespan){
 		x = -1;
@@ -44,7 +46,9 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		x = newX;
 		y = newY;
 	}
-	
+	public void setCarryDropSpace(RabbitsGrassSimulationSpace cds){
+		cdSpace = cds;
+	}
 	public String getID(){
 	    return "A-" + ID;
 	}
@@ -67,6 +71,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				getStepsToLive() + " steps to live.");
 	}
 	public void step(){
+	    money += cdSpace.takeMoneyAt(x, y);
 		stepsToLive--;
 	}
 }
