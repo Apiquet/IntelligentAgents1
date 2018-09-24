@@ -17,12 +17,17 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	private Schedule schedule;
 	
+	// Default Values
+	private static final int NUMAGENTS = 100;
+	private static final int WORLDXSIZE = 40;
+	private static final int WORLDYSIZE = 40;
+	  
 	//Number of agent
-	private int numAgents;
+	private int numAgents = NUMAGENTS;
 	
 	//World size	
-	private int worldXSize;
-	private int worldYSize;
+	private int worldXSize = WORLDXSIZE;
+	private int worldYSize = WORLDYSIZE;
 	
 	public void begin() {
 		// TODO Auto-generated method stub
@@ -55,15 +60,20 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public void setup() {
 		// TODO Auto-generated method stub
-
+		System.out.println("Running setup");
 	}
 	public void buildModel(){
-
+		System.out.println("Running BuildModel");
 	}
 
 	public void buildSchedule(){
-
+		System.out.println("Running BuildSchedule");
 	}
+
+	public void buildDisplay(){
+		System.out.println("Running BuildDisplay");
+	}
+	
 	public int getWorldXSize(){
 		return worldXSize;
 	}
@@ -80,9 +90,6 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		worldYSize = wys;
 	}
 
-	public void buildDisplay(){
-
-	}
 	public static void main(String[] args) {			
 		SimInit init = new SimInit();
 		//Instantiates the model
