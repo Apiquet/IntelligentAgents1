@@ -25,31 +25,37 @@ import uchicago.src.sim.util.SimUtilities;
 
 public class RabbitsGrassSimulationModel extends SimModelImpl {		
 
+	/***
+	 	DECLARATION 
+	 				***/
+	
 	private Schedule schedule;
 	private RabbitsGrassSimulationSpace cdSpace;
 	private DisplaySurface displaySurf;
 	private ArrayList agentList;
 
 	// Default Values
-	private static final int NUMAGENTS = 1;
-	private static final int GRASSGROWTHRATE = 1;
-	private static final int WORLDXSIZE = 20;
-	private static final int WORLDYSIZE = 20;
-	private static final int TOTALGRASS = 200;
+	private static final int AGENTS_NUMBER = 1;
+	private static final int GRASS_GROWTH_RATE = 1;
+	private static final int WORLD_X_SIZE = 20;
+	private static final int WORLD_Y_SIZE = 20;
+	private static final int TOTAL_GRASS_BEGINNING = 200;
 	private static final int BIRTH_THRESHOLD = 600;
 
-	//Number of agent
-	private int numAgents = NUMAGENTS;
-	private int grass = TOTALGRASS;
-	private int grassGrowthRate = GRASSGROWTHRATE;
-
+	//Variables
+	private int numAgents = AGENTS_NUMBER;
+	private int grass = TOTAL_GRASS_BEGINNING;
+	private int grassGrowthRate = GRASS_GROWTH_RATE;
 	private int agentBirthThreshold = BIRTH_THRESHOLD;
-	//World size	
-	private int worldXSize = WORLDXSIZE;
-	private int worldYSize = WORLDYSIZE;
+	private int worldXSize = WORLD_X_SIZE;
+	private int worldYSize = WORLD_Y_SIZE;
+	
+	
+	/***
+ 		Initialisation functions 
+ 								***/
 	
 	public void begin() {
-		// TODO Auto-generated method stub
 		buildModel();
 		buildSchedule();
 		buildDisplay();
@@ -57,7 +63,6 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	}
 
 	public String[] getInitParam() {
-		// TODO Auto-generated method stub
 		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentBirthThreshold", "GrassGrowthRate" };
 		return initParams;
 	}
@@ -69,17 +74,14 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		numAgents = na;
 	}
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Rabbit Grass Simulation";
 	}
 
 	public Schedule getSchedule() {
-		// TODO Auto-generated method stub
 		return schedule;
 	}
 
 	public void setup() {
-		// TODO Auto-generated method stub
 		System.out.println("Running setup");
 		cdSpace = null;
 	    agentList = new ArrayList();
