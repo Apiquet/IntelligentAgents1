@@ -19,7 +19,6 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	private int y;
 	private int vX;
 	private int vY;
-	private int grass;
 	private int stepsToLive;
 	private static int IDNumber = 0;
 	private int ID;
@@ -32,9 +31,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	public RabbitsGrassSimulationAgent(int birthThreshold){
 		x = -1;
 		y = -1;
-		grass = 0;
 		setVxVy();
-
 		stepsToLive = birthThreshold;
 		IDNumber++;
 		ID = IDNumber;
@@ -66,7 +63,9 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		newY = (newY + grid.getSizeY()) % grid.getSizeY();
 
 		if(tryMove(newX, newY)){
-			grass += cdSpace.takeGrassAt(x, y);
+			if(cdSpace.takeGrassAt(x, y)>0) {
+				stepsToLive += energyFromGrass;
+			}			
 		}
 		else{
 			setVxVy();
@@ -115,11 +114,6 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	public String getID(){
 		return "A-" + ID;
 	}
-
-	public int getGrass(){
-		return grass;
-	}
-
 	public int getStepsToLive(){
 		return stepsToLive;
 	}
