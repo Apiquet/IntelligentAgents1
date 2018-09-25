@@ -31,19 +31,19 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private ArrayList agentList;
 
 	// Default Values
-	private static final int NUMAGENTS = 40;
-	private static final int WORLDXSIZE = 40;
-	private static final int WORLDYSIZE = 40;
-	private static final int TOTALGRASS = 500;
-	private static final int AGENT_MIN_LIFESPAN = 40;
-	private static final int AGENT_MAX_LIFESPAN = 60;
+	private static final int NUMAGENTS = 1;
+	private static final int GRASSGROWTHRATE = 1;
+	private static final int WORLDXSIZE = 20;
+	private static final int WORLDYSIZE = 20;
+	private static final int TOTALGRASS = 200;
+	private static final int BIRTH_THRESHOLD = 600;
 
 	//Number of agent
 	private int numAgents = NUMAGENTS;
 	private int grass = TOTALGRASS;
+	private int grassGrowthRate = GRASSGROWTHRATE;
 
-	private int agentMinLifespan = AGENT_MIN_LIFESPAN;
-	private int agentMaxLifespan = AGENT_MAX_LIFESPAN;
+	private int agentBirthThreshold = BIRTH_THRESHOLD;
 	//World size	
 	private int worldXSize = WORLDXSIZE;
 	private int worldYSize = WORLDYSIZE;
@@ -58,7 +58,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public String[] getInitParam() {
 		// TODO Auto-generated method stub
-		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentMinLifespan", "AgentMaxLifespan" };
+		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentBirthThreshold", "GrassGrowthRate" };
 		return initParams;
 	}
 	public int getNumAgents(){
@@ -112,6 +112,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		System.out.println("Running BuildSchedule");
 		class CarryDropStep extends BasicAction {
 			public void execute() {
+				cdSpace.spreadGrass(grassGrowthRate);
 				SimUtilities.shuffle(agentList);
 				for(int i =0; i < agentList.size(); i++){
 					RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
@@ -154,7 +155,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    displaySurf.addDisplayable(displayAgents, "Agents");
 	}
 	private void addNewAgent(){
-		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentMinLifespan, agentMaxLifespan);
+		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentBirthThreshold);
 		agentList.add(a);
 	    cdSpace.addAgent(a);
 
@@ -163,7 +164,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		int count = 0;
 		for(int i = (agentList.size() - 1); i >= 0 ; i--){
 			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
-			if(cda.getStepsToLive() > 50){
+			if(cda.getStepsToLive() > 1000){
 				count++;
 				cda.DecreaseStepsToLiveFromReproduction();
 			}
@@ -176,7 +177,6 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
 			if(cda.getStepsToLive() < 1){
 				cdSpace.removeAgentAt(cda.getX(), cda.getY());
-				cdSpace.spreadGrass(cda.getGrass());
 				agentList.remove(i);
 				count++;
 			}
@@ -210,6 +210,14 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		worldYSize = wys;
 	}
 
+	public int getGrassGrowthRate() {
+		return grassGrowthRate;
+	}
+
+	public void setGrassGrowthRate(int i) {
+		grassGrowthRate = i;
+	}
+
 	public int getGrass() {
 		return grass;
 	}
@@ -217,20 +225,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	public void setGrass(int i) {
 		grass = i;
 	}
-	public int getAgentMaxLifespan() {
-		return agentMaxLifespan;
+	public int getAgentBirthThreshold() {
+		return agentBirthThreshold;
 	}
 
-	public int getAgentMinLifespan() {
-		return agentMinLifespan;
-	}
-
-	public void setAgentMaxLifespan(int i) {
-		agentMaxLifespan = i;
-	}
-
-	public void setAgentMinLifespan(int i) {
-		agentMinLifespan = i;
+	public void setAgentBirthThreshold(int i) {
+		agentBirthThreshold = i;
 	}
 	public static void main(String[] args) {			
 		SimInit init = new SimInit();
