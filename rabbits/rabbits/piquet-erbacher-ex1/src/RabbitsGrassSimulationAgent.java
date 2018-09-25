@@ -58,7 +58,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				getStepsToLive() + " steps to live.");
 	}
 
-	public void step(){
+	public void step(int energyFromGrass){
 		int newX = x + vX;
 		int newY = y + vY;
 
@@ -71,13 +71,13 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		}
 		else{
 			setVxVy();
-			stepsToLive++;
+			stepsToLive+=energyFromGrass;
 		}
 		stepsToLive--;
 	}
 
-	public void DecreaseStepsToLiveFromReproduction(){
-		stepsToLive-=20;
+	public void DecreaseStepsToLiveFromReproduction(int reproductionCost){
+		stepsToLive-=reproductionCost;
 	}
 
 	private boolean tryMove(int newX, int newY){

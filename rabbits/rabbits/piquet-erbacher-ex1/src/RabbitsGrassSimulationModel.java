@@ -40,7 +40,10 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private static final int WORLD_X_SIZE = 20;
 	private static final int WORLD_Y_SIZE = 20;
 	private static final int TOTAL_GRASS_BEGINNING = 200;
-	private static final int BIRTH_THRESHOLD = 600;
+	private static final int BIRTH_THRESHOLD = 800;
+	private static final int ENERGY_FROM_GRASS = 500;
+	private static final int REPRODUCTION_ENERGY = 500;
+	private static final int REPRODUCTION_COST = 400;
 
 	//Variables
 	private int numAgents = AGENTS_NUMBER;
@@ -49,6 +52,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private int agentBirthThreshold = BIRTH_THRESHOLD;
 	private int worldXSize = WORLD_X_SIZE;
 	private int worldYSize = WORLD_Y_SIZE;
+	private int energyFromGrass = ENERGY_FROM_GRASS;
+	private int reproductionEnergy = REPRODUCTION_ENERGY;
+	private int reproductionCost = REPRODUCTION_COST;
 
 
 	/***
@@ -63,7 +69,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	}
 
 	public String[] getInitParam() {
-		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentBirthThreshold", "GrassGrowthRate" };
+		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentBirthThreshold", "GrassGrowthRate", "EnergyFromGrass", "ReproductionCost", "ReproductionEnergy"};
 		return initParams;
 	}
 
@@ -97,34 +103,6 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		}
 	}
 
-	public void buildSchedule(){
-		System.out.println("Running BuildSchedule");
-		class CarryDropStep extends BasicAction {
-			public void execute() {
-				cdSpace.spreadGrass(grassGrowthRate);
-				SimUtilities.shuffle(agentList);
-				for(int i =0; i < agentList.size(); i++){
-					RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
-					cda.step();
-				}
-				int reproducibleAgentsCount = ReproducibleAgentsCount();
-				reapDeadAgents();
-				for(int i =0; i < reproducibleAgentsCount; i++){
-					addNewAgent();
-				}
-				displaySurf.updateDisplay();
-			}
-		}
-		schedule.scheduleActionBeginning(0, new CarryDropStep());
-		class CarryDropCountLiving extends BasicAction {
-			public void execute(){
-				countLivingAgents();
-			}
-		}
-
-		schedule.scheduleActionAtInterval(10, new CarryDropCountLiving());
-	}
-
 	public void buildDisplay(){
 		System.out.println("Running BuildDisplay");
 		ColorMap map = new ColorMap();
@@ -143,7 +121,37 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		displaySurf.addDisplayable(displayGrass, "Grass");
 		displaySurf.addDisplayable(displayAgents, "Agents");
 	}
+	
+	/***
+		Functions 
+	 ***/
+	public void buildSchedule(){
+		System.out.println("Running BuildSchedule");
+		class CarryDropStep extends BasicAction {
+			public void execute() {
+				cdSpace.spreadGrass(grassGrowthRate);
+				SimUtilities.shuffle(agentList);
+				for(int i =0; i < agentList.size(); i++){
+					RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
+					cda.step(energyFromGrass);
+				}
+				int reproducibleAgentsCount = ReproducibleAgentsCount();
+				reapDeadAgents();
+				for(int i =0; i < reproducibleAgentsCount; i++){
+					addNewAgent();
+				}
+				displaySurf.updateDisplay();
+			}
+		}
+		schedule.scheduleActionBeginning(0, new CarryDropStep());
+		class CarryDropCountLiving extends BasicAction {
+			public void execute(){
+				countLivingAgents();
+			}
+		}
 
+		schedule.scheduleActionAtInterval(10, new CarryDropCountLiving());
+	}
 	private void addNewAgent(){
 		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentBirthThreshold);
 		agentList.add(a);
@@ -154,9 +162,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		int count = 0;
 		for(int i = (agentList.size() - 1); i >= 0 ; i--){
 			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
-			if(cda.getStepsToLive() > 1000){
+			if(cda.getStepsToLive() > reproductionEnergy){
 				count++;
-				cda.DecreaseStepsToLiveFromReproduction();
+				cda.DecreaseStepsToLiveFromReproduction(reproductionCost);
 			}
 		}
 		return count;
@@ -204,6 +212,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	public Schedule getSchedule() {
 		return schedule;
 	}
+	
 	public int getWorldXSize(){
 		return worldXSize;
 	}
@@ -219,7 +228,14 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	public void setWorldYSize(int wys){
 		worldYSize = wys;
 	}
+	
+	public int getEnergyFromGrass(){
+		return energyFromGrass;
+	}
 
+	public void setEnergyFromGrass(int efg){
+		energyFromGrass = efg;
+	}
 	public int getGrassGrowthRate() {
 		return grassGrowthRate;
 	}
@@ -241,6 +257,20 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public void setAgentBirthThreshold(int i) {
 		agentBirthThreshold = i;
+	}
+	public int getReproductionCost() {
+		return reproductionCost;
+	}
+
+	public void setReproductionCost(int i) {
+		reproductionCost = i;
+	}
+	public int getReproductionEnergy() {
+		return reproductionEnergy;
+	}
+
+	public void setReproductionEnergy(int i) {
+		reproductionEnergy = i;
 	}
 
 	/***
