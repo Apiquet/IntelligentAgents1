@@ -22,14 +22,13 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	private RabbitsGrassSimulationSpace cdSpace;
 
 
-	public RabbitsGrassSimulationAgent(int minLifespan, int maxLifespan){
+	public RabbitsGrassSimulationAgent(int birthThreshold){
 		x = -1;
 		y = -1;
 		grass = 0;
 	    setVxVy();
 
-		stepsToLive = 
-		(int)((Math.random() * (maxLifespan - minLifespan)) + minLifespan);
+		stepsToLive = birthThreshold;
 		IDNumber++;
 	    ID = IDNumber;
 	}
