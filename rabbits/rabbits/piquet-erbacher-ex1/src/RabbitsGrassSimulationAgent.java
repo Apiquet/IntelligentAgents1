@@ -11,6 +11,10 @@ import uchicago.src.sim.space.Object2DGrid;
 
 public class RabbitsGrassSimulationAgent implements Drawable {
 
+	/***
+ 		DECLARATION 
+	 ***/
+
 	private int x;
 	private int y;
 	private int vX;
@@ -22,52 +26,26 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	private RabbitsGrassSimulationSpace cdSpace;
 
 
+	/***
+ 		Constructor 
+	 ***/
 	public RabbitsGrassSimulationAgent(int birthThreshold){
 		x = -1;
 		y = -1;
 		grass = 0;
-	    setVxVy();
+		setVxVy();
 
 		stepsToLive = birthThreshold;
 		IDNumber++;
-	    ID = IDNumber;
-	}
-	private void setVxVy(){
-		vX = 0;
-		vY = 0;
-		while((vX == 0) && ( vY == 0)){
-			vX = (int)Math.floor(Math.random() * 3) - 1;
-			vY = (int)Math.floor(Math.random() * 3) - 1;
-		}
-	}
-	public int getX(){
-		return x;
+		ID = IDNumber;
 	}
 
-	public int getY(){
-		return y;
-	}
+	/***
+	   	 Functions 
+	 ***/
 
 	public void draw(SimGraphics G){
 		G.drawFastRoundRect(Color.white);
-	}
-	public void setXY(int newX, int newY){
-		x = newX;
-		y = newY;
-	}
-	public void setCarryDropSpace(RabbitsGrassSimulationSpace cds){
-		cdSpace = cds;
-	}
-	public String getID(){
-	    return "A-" + ID;
-	}
-
-	public int getGrass(){
-		return grass;
-	}
-
-	public int getStepsToLive(){
-		return stepsToLive;
 	}
 
 	public void report(){
@@ -79,6 +57,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				" and " + 
 				getStepsToLive() + " steps to live.");
 	}
+
 	public void step(){
 		int newX = x + vX;
 		int newY = y + vY;
@@ -96,10 +75,54 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		}
 		stepsToLive--;
 	}
+
 	public void DecreaseStepsToLiveFromReproduction(){
 		stepsToLive-=20;
 	}
+
 	private boolean tryMove(int newX, int newY){
 		return cdSpace.moveAgentAt(x, y, newX, newY);
+	}
+
+	private void setVxVy(){
+		vX = 0;
+		vY = 0;
+		while((vX == 0) && ( vY == 0)){
+			vX = (int)Math.floor(Math.random() * 3) - 1;
+			vY = (int)Math.floor(Math.random() * 3) - 1;
+		}
+	}
+
+	/***
+	   Get/Set functions 
+	 ***/
+
+	public int getX(){
+		return x;
+	}
+
+	public int getY(){
+		return y;
+	}
+
+	public void setXY(int newX, int newY){
+		x = newX;
+		y = newY;
+	}
+
+	public void setCarryDropSpace(RabbitsGrassSimulationSpace cds){
+		cdSpace = cds;
+	}
+
+	public String getID(){
+		return "A-" + ID;
+	}
+
+	public int getGrass(){
+		return grass;
+	}
+
+	public int getStepsToLive(){
+		return stepsToLive;
 	}
 }
