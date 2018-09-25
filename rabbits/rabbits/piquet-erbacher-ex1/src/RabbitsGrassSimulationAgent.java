@@ -52,13 +52,12 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		System.out.println(getID() + 
 				" at " + 
 				x + ", " + y + 
-				" has " + 
-				getGrass() + " dollars" + 
-				" and " + 
+				" has " +
 				getStepsToLive() + " steps to live.");
 	}
 
 	public void step(int energyFromGrass){
+		setVxVy();
 		int newX = x + vX;
 		int newY = y + vY;
 
@@ -71,7 +70,6 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		}
 		else{
 			setVxVy();
-			stepsToLive+=energyFromGrass;
 		}
 		stepsToLive--;
 	}
@@ -87,7 +85,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	private void setVxVy(){
 		vX = 0;
 		vY = 0;
-		while((vX == 0) && ( vY == 0)){
+		while((vX == 0) && ( vY == 0) || (vX == 1) && ( vY == 1)|| (vX == -1) && ( vY == -1)|| (vX == -1) && ( vY == 1)|| (vX == 1) && ( vY == -1)){
 			vX = (int)Math.floor(Math.random() * 3) - 1;
 			vY = (int)Math.floor(Math.random() * 3) - 1;
 		}

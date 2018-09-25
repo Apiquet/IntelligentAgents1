@@ -41,9 +41,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private static final int WORLD_Y_SIZE = 20;
 	private static final int TOTAL_GRASS_BEGINNING = 200;
 	private static final int BIRTH_THRESHOLD = 800;
-	private static final int ENERGY_FROM_GRASS = 500;
-	private static final int REPRODUCTION_ENERGY = 500;
-	private static final int REPRODUCTION_COST = 400;
+	private static final int ENERGY_FROM_GRASS = 5500;
+	private static final int REPRODUCTION_ENERGY = 1000;
+	private static final int REPRODUCTION_COST = 100;
 
 	//Variables
 	private int numAgents = AGENTS_NUMBER;
