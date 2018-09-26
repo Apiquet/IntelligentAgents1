@@ -75,7 +75,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		newY = (newY + grid.getSizeY()) % grid.getSizeY();
 
 		if(tryMove(newX, newY)){
-			int grassValue = cdSpace.takeGrassAt(newX, newY);
+			int grassValue = cdSpace.takeGrassAt(x, y);
 			if(grassValue>0) {
 				stepsToLive += grassValue*energyFromGrass;
 			}			

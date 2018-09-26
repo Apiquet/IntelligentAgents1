@@ -72,6 +72,17 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 			return (double)cdSpace.getTotalGrass();
 		}
 	}
+	
+	class agentsInSpace implements DataSource, Sequence {
+
+		public Object execute() {
+			return new Double(getSValue());
+		}
+
+		public double getSValue() {
+			return (double)countLivingAgents();
+		}
+	}
 
 	/***
  		Initialisation functions 
@@ -158,7 +169,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		displaySurf.addDisplayable(displayAgents, "Agents");
 
 	    amountOfGrassInSpace.addSequence("Grass In Space", new grassInSpace());
-	    numberOfAgentsInSpace.addSequence("Agents In Space", new grassInSpace());
+	    numberOfAgentsInSpace.addSequence("Agents In Space", new agentsInSpace());
 
 	}
 	
