@@ -1,6 +1,12 @@
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import uchicago.src.sim.space.Object2DGrid;
 
 /**
@@ -42,7 +48,13 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	 ***/
 
 	public void draw(SimGraphics G){
-		G.drawFastRoundRect(Color.white);
+		BufferedImage img = null;
+		try {
+		    img = ImageIO.read(new File("C:\\Users\\antho\\Pictures\\rabbit.png"));
+		} catch (IOException e) {
+		}
+		G.drawImageToFit(img);
+		//drawFastRoundRect(Color.white);
 	}
 
 	public void report(){
