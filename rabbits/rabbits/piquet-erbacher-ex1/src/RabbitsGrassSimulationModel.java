@@ -37,6 +37,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private DisplaySurface displaySurf;
 	private ArrayList agentList;
 	private OpenSequenceGraph amountOfGrassInSpace;
+	private OpenSequenceGraph numberOfAgentsInSpace;
 
 
 	// Default Values
@@ -82,6 +83,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		buildDisplay();
 		displaySurf.display();
 	    amountOfGrassInSpace.display();
+	    numberOfAgentsInSpace.display();
 
 	}
 
@@ -106,14 +108,21 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    	amountOfGrassInSpace.dispose();
 	    }
 	    amountOfGrassInSpace = null;
+	    
+	    if (numberOfAgentsInSpace != null){
+	    	numberOfAgentsInSpace.dispose();
+	    }
+	    numberOfAgentsInSpace = null;
 
 	    // Create Displays
 	    displaySurf = new DisplaySurface(this, "Carry Drop Model Window 1");
 	    amountOfGrassInSpace = new OpenSequenceGraph("Amount Of Grass In Space",this);
+	    numberOfAgentsInSpace = new OpenSequenceGraph("Number of Agents In Space",this);
 
 	    // Register Displays
 	    registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
 	    this.registerMediaProducer("Plot", amountOfGrassInSpace);
+	    this.registerMediaProducer("Plot", numberOfAgentsInSpace);
 	}
 
 	public void buildModel(){
@@ -147,8 +156,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 		displaySurf.addDisplayable(displayGrass, "Grass");
 		displaySurf.addDisplayable(displayAgents, "Agents");
-		
+
 	    amountOfGrassInSpace.addSequence("Grass In Space", new grassInSpace());
+	    numberOfAgentsInSpace.addSequence("Agents In Space", new grassInSpace());
 
 	}
 	
@@ -184,8 +194,14 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 				amountOfGrassInSpace.step();
 			}
 		}
+		class CarryDropUpdateAgentsInSpace extends BasicAction {
+			public void execute(){
+				numberOfAgentsInSpace.step();
+			}
+		}
 		schedule.scheduleActionAtInterval(10, new CarryDropCountLiving());
 	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateGrassInSpace());
+	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateAgentsInSpace());
 
 	}
 	private void addNewAgent(){
