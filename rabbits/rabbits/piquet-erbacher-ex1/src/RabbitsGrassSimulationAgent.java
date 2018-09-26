@@ -50,7 +50,7 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	public void draw(SimGraphics G){
 		BufferedImage img = null;
 		try {
-		    img = ImageIO.read(new File("C:\\Users\\antho\\Pictures\\rabbit.png"));
+		    img = ImageIO.read(new File("C:\\Users\\antho\\Pictures\\rabbit.jpg"));
 		} catch (IOException e) {
 		}
 		G.drawImageToFit(img);
@@ -64,7 +64,10 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 				" has " +
 				getStepsToLive() + " steps to live.");
 	}
-
+	/*
+	 * Function called at each step to allow the agents to move
+	 * Input: amount of energy per grass eaten (set up by the user)
+	 */
 	public void step(int energyFromGrass){
 		setVxVy();
 		int newX = x + vX;

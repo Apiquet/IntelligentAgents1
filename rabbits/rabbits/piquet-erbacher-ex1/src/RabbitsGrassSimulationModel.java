@@ -97,7 +97,12 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    numberOfAgentsInSpace.display();
 
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see uchicago.src.sim.engine.SimModel#getInitParam()
+	 * Allows Repast to know which parameters can be set by the user
+	 * Output: String Array
+	 */
 	public String[] getInitParam() {
 		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentBirthThreshold", "GrassGrowthRate", "EnergyFromGrass", "ReproductionCost", "ReproductionEnergy"};
 		return initParams;
@@ -149,28 +154,27 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 			cda.report();
 		}
 	}
-
+	/*
+	 * Build how to represent the display on the space and set the map color
+	 */
 	public void buildDisplay(){
 		System.out.println("Running BuildDisplay");
 		ColorMap map = new ColorMap();
-
+		//Adding several tints for the grass (useful to display the density difference)
 		for(int i = 1; i<16; i++){
-			map.mapColor(i, new Color(0,100 + 80/i,0));
+			map.mapColor(i, new Color(0,70 + 110/i,0));
 		}
+		//map color, the ground
 		map.mapColor(0, new Color(204,153,51));
-
-		Value2DDisplay displayGrass = 
-				new Value2DDisplay(cdSpace.getCurrentGrassSpace(), map);
-
+		Value2DDisplay displayGrass = new Value2DDisplay(cdSpace.getCurrentGrassSpace(), map);
 		Object2DDisplay displayAgents = new Object2DDisplay(cdSpace.getCurrentAgentSpace());
 		displayAgents.setObjectList(agentList);
-
+		//adding grass and agents to the display
 		displaySurf.addDisplayable(displayGrass, "Grass");
 		displaySurf.addDisplayable(displayAgents, "Agents");
-
+		//adding 2 plots, grass and agents in the space
 	    amountOfGrassInSpace.addSequence("Grass In Space", new grassInSpace());
 	    numberOfAgentsInSpace.addSequence("Agents In Space", new agentsInSpace());
-
 	}
 	
 	/***

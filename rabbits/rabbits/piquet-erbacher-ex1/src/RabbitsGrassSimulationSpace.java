@@ -79,12 +79,22 @@ public class RabbitsGrassSimulationSpace {
 		grassSpace.putObjectAt(x, y, new Integer(0));
 		return grass;
 	}
+	
+	/*
+	 * move agent from (x,y) to (newX,newY) if cell (newX,newY) is not occupied
+	 * Input: int x, int y, int newX, int newY
+	 * Output: boolean result of the move (true if the agent was moved)
+	 */
 	public boolean moveAgentAt(int x, int y, int newX, int newY){
+	    //bool result of the move
 		boolean retVal = false;
 		if(!isCellOccupied(newX, newY)){
+		    //copy the agent
 			RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentSpace.getObjectAt(x, y);
+			//remove agent at (x,y)
 			removeAgentAt(x,y);
 			cda.setXY(newX, newY);
+			//put the agent at (newX,newY)
 			agentSpace.putObjectAt(newX, newY, cda);
 			retVal = true;
 		}
