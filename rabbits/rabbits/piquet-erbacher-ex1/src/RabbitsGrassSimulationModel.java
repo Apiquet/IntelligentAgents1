@@ -1,14 +1,17 @@
 import java.awt.Color;
 import java.util.ArrayList;
 
+import uchicago.src.sim.analysis.DataSource;
+import uchicago.src.sim.analysis.OpenSequenceGraph;
+import uchicago.src.sim.analysis.Sequence;
 import uchicago.src.sim.engine.BasicAction;
 import uchicago.src.sim.engine.Schedule;
-import uchicago.src.sim.engine.SimModelImpl;
 import uchicago.src.sim.engine.SimInit;
+import uchicago.src.sim.engine.SimModelImpl;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.ColorMap;
-import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.gui.Object2DDisplay;
+import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.util.SimUtilities;
 
 
@@ -33,6 +36,8 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private RabbitsGrassSimulationSpace cdSpace;
 	private DisplaySurface displaySurf;
 	private ArrayList agentList;
+	private OpenSequenceGraph amountOfGrassInSpace;
+
 
 	// Default Values
 	private static final int AGENTS_NUMBER = 1;
@@ -55,7 +60,17 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private int energyFromGrass = ENERGY_FROM_GRASS;
 	private int reproductionEnergy = REPRODUCTION_ENERGY;
 	private int reproductionCost = REPRODUCTION_COST;
+	
+	class grassInSpace implements DataSource, Sequence {
 
+		public Object execute() {
+			return new Double(getSValue());
+		}
+
+		public double getSValue() {
+			return (double)cdSpace.getTotalGrass();
+		}
+	}
 
 	/***
  		Initialisation functions 
@@ -66,6 +81,8 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		buildSchedule();
 		buildDisplay();
 		displaySurf.display();
+	    amountOfGrassInSpace.display();
+
 	}
 
 	public String[] getInitParam() {
@@ -75,18 +92,28 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 	public void setup() {
 		System.out.println("Running setup");
-		cdSpace = null;
-		agentList = new ArrayList();
-		schedule = new Schedule(1);
+	    cdSpace = null;
+	    agentList = new ArrayList();
+	    schedule = new Schedule(1);
 
-		if (displaySurf != null){
-			displaySurf.dispose();
-		}
-		displaySurf = null;
+	    // Tear down Displays
+	    if (displaySurf != null){
+	      displaySurf.dispose();
+	    }
+	    displaySurf = null;
 
-		displaySurf = new DisplaySurface(this, "Carry Drop Model Window 1");
+	    if (amountOfGrassInSpace != null){
+	    	amountOfGrassInSpace.dispose();
+	    }
+	    amountOfGrassInSpace = null;
 
-		registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
+	    // Create Displays
+	    displaySurf = new DisplaySurface(this, "Carry Drop Model Window 1");
+	    amountOfGrassInSpace = new OpenSequenceGraph("Amount Of Grass In Space",this);
+
+	    // Register Displays
+	    registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
+	    this.registerMediaProducer("Plot", amountOfGrassInSpace);
 	}
 
 	public void buildModel(){
@@ -120,6 +147,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 		displaySurf.addDisplayable(displayGrass, "Grass");
 		displaySurf.addDisplayable(displayAgents, "Agents");
+		
+	    amountOfGrassInSpace.addSequence("Grass In Space", new grassInSpace());
+
 	}
 	
 	/***
@@ -149,8 +179,14 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 				countLivingAgents();
 			}
 		}
-
+		class CarryDropUpdateGrassInSpace extends BasicAction {
+			public void execute(){
+				amountOfGrassInSpace.step();
+			}
+		}
 		schedule.scheduleActionAtInterval(10, new CarryDropCountLiving());
+	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateGrassInSpace());
+
 	}
 	private void addNewAgent(){
 		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentBirthThreshold);
