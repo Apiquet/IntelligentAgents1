@@ -30,6 +30,10 @@ public class RabbitsGrassSimulationSpace {
 	/***
 		Functions 
 	 ***/
+	/*
+	 * Adding grass in the simulation
+	 * Input: INT grass
+	 */
 	public void spreadGrass(int grass){
 		// Randomly place grass in grassSpace
 		for(int i = 0; i < grass; i++){
@@ -44,19 +48,26 @@ public class RabbitsGrassSimulationSpace {
 			grassSpace.putObjectAt(x,y,new Integer(currentValue + 1));
 		}
 	}
-
+	/*
+	 * Verify if a cell is occupied at a location (x,y)
+	 * Input: INT X, INT Y
+	 */
 	public boolean isCellOccupied(int x, int y){
 		boolean retVal = false;
 		if(agentSpace.getObjectAt(x, y)!=null) retVal = true;
 		return retVal;
 	}
-
+	/*
+	 * Adding agent in the simulation, randomly but verifying if possible
+	 * Input: RabbitsGrassSimulationAgent
+	 */
 	public boolean addAgent(RabbitsGrassSimulationAgent agent){
 		boolean retVal = false;
 		int count = 0;
 		int countLimit = 10 * agentSpace.getSizeX() * agentSpace.getSizeY();
 
 		while((retVal==false) && (count < countLimit)){
+			//random position
 			int x = (int)(Math.random()*(agentSpace.getSizeX()));
 			int y = (int)(Math.random()*(agentSpace.getSizeY()));
 			if(isCellOccupied(x,y) == false){
@@ -70,10 +81,16 @@ public class RabbitsGrassSimulationSpace {
 
 		return retVal;
 	}
-
+	/*
+	 * Removing agent from the simulation
+	 * Input: INT x, INT y
+	 */
 	public void removeAgentAt(int x, int y){
 		agentSpace.putObjectAt(x, y, null);
 	}
+	/*
+	 * Taking grass on the simulation
+	 */
 	public int takeGrassAt(int x, int y){
 		int grass = getGrassAt(x, y);
 		grassSpace.putObjectAt(x, y, new Integer(0));

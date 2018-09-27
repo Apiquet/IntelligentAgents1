@@ -62,6 +62,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private int reproductionEnergy = REPRODUCTION_ENERGY;
 	private int reproductionCost = REPRODUCTION_COST;
 	
+	/***
+ 		GRAPHS CLASSES 
+	 ***/
 	/*
 	 * Classes for graphs
 	 * Execute is called by the graph and has to return the value to display
@@ -78,22 +81,18 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	}
 
 	class agentsInSpace implements DataSource, Sequence {
-
 		public Object execute() {
 			return new Double(getSValue());
 		}
-
 		public double getSValue() {
 			return (double)countLivingAgents();
 		}
 	}
 	
 	class grassEnergy implements DataSource, Sequence {
-
 		public Object execute() {
 			return new Double(getSValue());
 		}
-
 		public double getSValue() {
 			return (double)energyFromGrass;
 		}
@@ -111,7 +110,6 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    amountOfGrassInSpace.display();
 	    numberOfAgentsInSpace.display();
 	    analysisAgentNumberInFunctionGrassEnergy.display();
-
 	}
 	/*
 	 * (non-Javadoc)
@@ -123,7 +121,11 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		String[] initParams = { "NumAgents", "WorldXSize", "WorldYSize", "Grass", "AgentBirthThreshold", "GrassGrowthRate", "EnergyFromGrass", "ReproductionCost", "ReproductionEnergy"};
 		return initParams;
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see uchicago.src.sim.engine.SimModel#setup()
+	 * setting up graph, register display
+	 */
 	public void setup() {
 		System.out.println("Running setup");
 	    cdSpace = null;
@@ -165,7 +167,9 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    this.registerMediaProducer("Plot", numberOfAgentsInSpace);
 	    this.registerMediaProducer("Plot", analysisAgentNumberInFunctionGrassEnergy);
 	}
-
+	/*
+	 * Building model, initial number of agent and grass
+	 */
 	public void buildModel(){
 		System.out.println("Running BuildModel");
 		cdSpace = new RabbitsGrassSimulationSpace(worldXSize, worldYSize);
@@ -202,22 +206,27 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    numberOfAgentsInSpace.addSequence("Agents In Space", new agentsInSpace());
 	    analysisAgentNumberInFunctionGrassEnergy.addSequence("Agents Number", new agentsInSpace());
 	    analysisAgentNumberInFunctionGrassEnergy.addSequence("Grass Energy", new grassEnergy());
-	    //analysisAgentNumberInFunctionGrassEnergy.addSequence("Grass Energy", new grassInSpace());
+	    analysisAgentNumberInFunctionGrassEnergy.addSequence("Grass Energy", new grassInSpace());
 	}
 	
 	/***
 		Functions 
 	 ***/
+	/*
+	 * Updating simulation at each tick
+	 */
 	public void buildSchedule(){
 		System.out.println("Running BuildSchedule");
 		class CarryDropStep extends BasicAction {
 			public void execute() {
+				//adding grass based on the grass growth rate
 				cdSpace.spreadGrass(grassGrowthRate);
 				SimUtilities.shuffle(agentList);
 				for(int i =0; i < agentList.size(); i++){
 					RabbitsGrassSimulationAgent cda = (RabbitsGrassSimulationAgent)agentList.get(i);
 					cda.step(energyFromGrass);
 				}
+				//reproduction and kill
 				int reproducibleAgentsCount = ReproducibleAgentsCount();
 				reapDeadAgents();
 				for(int i =0; i < reproducibleAgentsCount; i++){
@@ -227,6 +236,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 			}
 		}
 		schedule.scheduleActionBeginning(0, new CarryDropStep());
+		//classes for graphs
 		class CarryDropCountLiving extends BasicAction {
 			public void execute(){
 				countLivingAgents();
@@ -247,18 +257,27 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 				analysisAgentNumberInFunctionGrassEnergy.step();
 			}
 		}
+		//updating graphs
 		schedule.scheduleActionAtInterval(10, new CarryDropCountLiving());
 	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateGrassInSpace());
 	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateAgentsInSpace());
 	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateAnalysisAgentGrassEnergy());
 
 	}
+	/*
+	 * Adding agent to the map
+	 */
 	private void addNewAgent(){
 		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentBirthThreshold);
 		agentList.add(a);
 		cdSpace.addAgent(a);
 
 	}
+	/*
+	 * Count the number of reproduction to proceed 
+	 * Decrease the live of each reproducible rabbit (based on the reproduction cost)
+	 * Output: INT reproducible count
+	 */
 	private int ReproducibleAgentsCount(){
 		int count = 0;
 		for(int i = (agentList.size() - 1); i >= 0 ; i--){
@@ -270,6 +289,10 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		}
 		return count;
 	}
+	/*
+	 * Kill rabbit that have less than 1 live
+	 * Output: INT count
+	 */
 	private int reapDeadAgents(){
 		int count = 0;
 		for(int i = (agentList.size() - 1); i >= 0 ; i--){
@@ -282,7 +305,10 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		}
 		return count;
 	}
-
+	/*
+	 * Count the current agent living
+	 * Output: Count
+	 */
 	private int countLivingAgents(){
 		int livingAgents = 0;
 		for(int i = 0; i < agentList.size(); i++){
