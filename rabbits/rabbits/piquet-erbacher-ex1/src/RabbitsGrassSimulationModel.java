@@ -38,18 +38,18 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private ArrayList agentList;
 	private OpenSequenceGraph amountOfGrassInSpace;
 	private OpenSequenceGraph numberOfAgentsInSpace;
-
+	private OpenSequenceGraph analysisAgentNumberInFunctionGrassEnergy;
 
 	// Default Values
 	private static final int AGENTS_NUMBER = 1;
 	private static final int GRASS_GROWTH_RATE = 1;
-	private static final int WORLD_X_SIZE = 20;
-	private static final int WORLD_Y_SIZE = 20;
-	private static final int TOTAL_GRASS_BEGINNING = 200;
-	private static final int BIRTH_THRESHOLD = 500;
-	private static final int ENERGY_FROM_GRASS = 5;
-	private static final int REPRODUCTION_ENERGY = 1000;
-	private static final int REPRODUCTION_COST = 500;
+	private static final int WORLD_X_SIZE = 50;
+	private static final int WORLD_Y_SIZE = 50;
+	private static final int TOTAL_GRASS_BEGINNING = 50;
+	private static final int BIRTH_THRESHOLD = 100;
+	private static final int ENERGY_FROM_GRASS = 1000;
+	private static final int REPRODUCTION_ENERGY = 800;
+	private static final int REPRODUCTION_COST = 750;
 
 	//Variables
 	private int numAgents = AGENTS_NUMBER;
@@ -72,7 +72,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 			return (double)cdSpace.getTotalGrass();
 		}
 	}
-	
+
 	class agentsInSpace implements DataSource, Sequence {
 
 		public Object execute() {
@@ -81,6 +81,17 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 
 		public double getSValue() {
 			return (double)countLivingAgents();
+		}
+	}
+	
+	class grassEnergy implements DataSource, Sequence {
+
+		public Object execute() {
+			return new Double(getSValue());
+		}
+
+		public double getSValue() {
+			return (double)energyFromGrass;
 		}
 	}
 
@@ -95,6 +106,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		displaySurf.display();
 	    amountOfGrassInSpace.display();
 	    numberOfAgentsInSpace.display();
+	    analysisAgentNumberInFunctionGrassEnergy.display();
 
 	}
 	/*
@@ -124,21 +136,30 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	    	amountOfGrassInSpace.dispose();
 	    }
 	    amountOfGrassInSpace = null;
-	    
+
 	    if (numberOfAgentsInSpace != null){
 	    	numberOfAgentsInSpace.dispose();
 	    }
 	    numberOfAgentsInSpace = null;
+	    
+	    if (analysisAgentNumberInFunctionGrassEnergy != null){
+	    	analysisAgentNumberInFunctionGrassEnergy.dispose();
+	    }
+	    analysisAgentNumberInFunctionGrassEnergy = null;
 
 	    // Create Displays
 	    displaySurf = new DisplaySurface(this, "Carry Drop Model Window 1");
 	    amountOfGrassInSpace = new OpenSequenceGraph("Amount Of Grass In Space",this);
 	    numberOfAgentsInSpace = new OpenSequenceGraph("Number of Agents In Space",this);
-
+	    analysisAgentNumberInFunctionGrassEnergy = new OpenSequenceGraph("Number of Agents and Grass Energy",this);
+	    amountOfGrassInSpace.setAxisTitles("time", "grass amount");
+	    numberOfAgentsInSpace.setAxisTitles("time", "agents number");
+	    
 	    // Register Displays
 	    registerDisplaySurface("Carry Drop Model Window 1", displaySurf);
 	    this.registerMediaProducer("Plot", amountOfGrassInSpace);
 	    this.registerMediaProducer("Plot", numberOfAgentsInSpace);
+	    this.registerMediaProducer("Plot", analysisAgentNumberInFunctionGrassEnergy);
 	}
 
 	public void buildModel(){
@@ -173,8 +194,11 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 		displaySurf.addDisplayable(displayGrass, "Grass");
 		displaySurf.addDisplayable(displayAgents, "Agents");
 		//adding 2 plots, grass and agents in the space
-	    amountOfGrassInSpace.addSequence("Grass In Space", new grassInSpace());
+		amountOfGrassInSpace.addSequence("Grass In Space", new grassInSpace());
 	    numberOfAgentsInSpace.addSequence("Agents In Space", new agentsInSpace());
+	    analysisAgentNumberInFunctionGrassEnergy.addSequence("Agents Number", new agentsInSpace());
+	    analysisAgentNumberInFunctionGrassEnergy.addSequence("Grass Energy", new grassEnergy());
+	    //analysisAgentNumberInFunctionGrassEnergy.addSequence("Grass Energy", new grassInSpace());
 	}
 	
 	/***
@@ -214,9 +238,15 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 				numberOfAgentsInSpace.step();
 			}
 		}
+		class CarryDropUpdateAnalysisAgentGrassEnergy extends BasicAction {
+			public void execute(){
+				analysisAgentNumberInFunctionGrassEnergy.step();
+			}
+		}
 		schedule.scheduleActionAtInterval(10, new CarryDropCountLiving());
 	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateGrassInSpace());
 	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateAgentsInSpace());
+	    schedule.scheduleActionAtInterval(10, new CarryDropUpdateAnalysisAgentGrassEnergy());
 
 	}
 	private void addNewAgent(){
