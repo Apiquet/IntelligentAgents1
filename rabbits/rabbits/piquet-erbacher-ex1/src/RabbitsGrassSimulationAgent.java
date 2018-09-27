@@ -46,17 +46,26 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	/***
 	   	 Functions 
 	 ***/
-
+	/*
+	 * (non-Javadoc)
+	 * @see uchicago.src.sim.gui.Drawable#draw(uchicago.src.sim.gui.SimGraphics)
+	 * Choose how to represent the agent
+	 * Input: SimGraphics
+	 */
 	public void draw(SimGraphics G){
 		BufferedImage img = null;
 		try {
+			//loading the image (can be an url)
 		    img = ImageIO.read(new File("C:\\Users\\antho\\Pictures\\rabbit.jpg"));
 		} catch (IOException e) {
 		}
-		G.drawImageToFit(img);
+		//draw image to fit adapt the image size to the cell
+		G.drawImageToFit(img);		
 		//drawFastRoundRect(Color.white);
 	}
-
+	/*
+	 * Adding message in the console
+	 */
 	public void report(){
 		System.out.println(getID() + 
 				" at " + 
@@ -88,19 +97,28 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 		}
 		stepsToLive--;
 	}
-
+	/*
+	 * Decrease live after a reproduction
+	 * Input: INT Reproduction cost 
+	 */
 	public void DecreaseStepsToLiveFromReproduction(int reproductionCost){
 		stepsToLive-=reproductionCost;
 	}
-
+	/*
+	 * Try moving to new location
+	 * Input: INT newX, INT NewY
+	 */
 	private boolean tryMove(int newX, int newY){
 		return cdSpace.moveAgentAt(x, y, newX, newY);
 	}
-
+	/*
+	 * Find the next location randomly
+	 */
 	private void setVxVy(){
 		vX = 0;
 		vY = 0;
-		while((vX == 0) && ( vY == 0) || (vX == 1) && ( vY == 1)|| (vX == -1) && ( vY == -1)|| (vX == -1) && ( vY == 1)|| (vX == 1) && ( vY == -1)){
+		//the moves allowed are N,S,E,O so we cannot have NewX!=0 and NewY!=0 because in this case, the rabbit will go in diagonal
+		while((vX == 0) && ( vY == 0) || (vX != 0) && ( vY != 0)){
 			vX = (int)Math.floor(Math.random() * 3) - 1;
 			vY = (int)Math.floor(Math.random() * 3) - 1;
 		}

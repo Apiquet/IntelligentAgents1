@@ -43,11 +43,11 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	// Default Values
 	private static final int AGENTS_NUMBER = 1;
 	private static final int GRASS_GROWTH_RATE = 1;
-	private static final int WORLD_X_SIZE = 50;
-	private static final int WORLD_Y_SIZE = 50;
+	private static final int WORLD_X_SIZE = 20;
+	private static final int WORLD_Y_SIZE = 20;
 	private static final int TOTAL_GRASS_BEGINNING = 50;
 	private static final int BIRTH_THRESHOLD = 100;
-	private static final int ENERGY_FROM_GRASS = 1000;
+	private static final int ENERGY_FROM_GRASS = 50;
 	private static final int REPRODUCTION_ENERGY = 800;
 	private static final int REPRODUCTION_COST = 750;
 
@@ -62,12 +62,16 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	private int reproductionEnergy = REPRODUCTION_ENERGY;
 	private int reproductionCost = REPRODUCTION_COST;
 	
+	/*
+	 * Classes for graphs
+	 * Execute is called by the graph and has to return the value to display
+	 */
 	class grassInSpace implements DataSource, Sequence {
-
+		//called at each tick
 		public Object execute() {
 			return new Double(getSValue());
 		}
-
+		//method to fetch the value to display
 		public double getSValue() {
 			return (double)cdSpace.getTotalGrass();
 		}
