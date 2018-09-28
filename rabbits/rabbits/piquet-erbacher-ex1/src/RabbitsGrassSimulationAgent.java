@@ -53,15 +53,16 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 	 * Input: SimGraphics
 	 */
 	public void draw(SimGraphics G){
-		BufferedImage img = null;
+		//Loading an image on agent
+		/*BufferedImage img = null;
 		try {
 			//loading the image (can be an url)
-		    img = ImageIO.read(new File("C:\\Users\\antho\\Pictures\\rabbit.jpg"));
+		    img = ImageIO.read(new File("C:\\Users\\anthony\\Pictures\\rabbit.jpg"));
 		} catch (IOException e) {
 		}
 		//draw image to fit adapt the image size to the cell
-		G.drawImageToFit(img);		
-		//drawFastRoundRect(Color.white);
+		G.drawImageToFit(img);*/		
+		G.drawFastRoundRect(Color.white);
 	}
 	/*
 	 * Adding message in the console
