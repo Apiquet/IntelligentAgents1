@@ -269,8 +269,7 @@ public class RabbitsGrassSimulationModel extends SimModelImpl {
 	 */
 	private void addNewAgent(){
 		RabbitsGrassSimulationAgent a = new RabbitsGrassSimulationAgent(agentBirthThreshold);
-		agentList.add(a);
-		cdSpace.addAgent(a);
+		if(cdSpace.addAgent(a)) agentList.add(a);
 
 	}
 	/*

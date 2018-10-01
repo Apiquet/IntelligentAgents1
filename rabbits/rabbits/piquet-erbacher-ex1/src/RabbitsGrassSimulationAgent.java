@@ -91,12 +91,12 @@ public class RabbitsGrassSimulationAgent implements Drawable {
 			int grassValue = cdSpace.takeGrassAt(x, y);
 			if(grassValue>0) {
 				stepsToLive += grassValue*energyFromGrass;
-			}			
+			}	
+			stepsToLive-=2;
 		}
 		else{
-			setVxVy();
-		}
-		stepsToLive--;
+			stepsToLive--;
+		}		
 	}
 	/*
 	 * Decrease live after a reproduction
